@@ -2,15 +2,18 @@ const fs = require('fs');
 const path = require('path');
 
 
-function readMDLFile(filePath) {
+function mdLinks(filePath) {
   // Obtén la extensión del archivo
   const fileExtension = path.extname(filePath);
 
   // Valida la extensión
-  if (fileExtension.toLowerCase() !== '.md' && fileExtension.toLowerCase() !== '.mdl') {
-    return Promise.reject(new Error('Extensión del archivo es incorrecta.'));
-  }
+  const extensions = ['md', 'markdown', 'mkd', 'mdown', 'mdtxt', 'mdtext'];
+  const formatted = fileExtension.toLowerCase().slice(1);
 
+  if (!extensions.includes(formatted)) {
+    console.log(`Extension de archivo incorrecta`);
+  }
+else{
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
@@ -20,7 +23,6 @@ function readMDLFile(filePath) {
       }
     });
   });
+  }
 }
-
-//export { readMDLFile };
-module.exports = readMDLFile;
+module.exports = mdLinks;
