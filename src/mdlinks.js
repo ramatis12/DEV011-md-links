@@ -14,34 +14,34 @@ const convertAbsolute = (route) => {
 };
 
 function validarExtension(route) {
+  const rutaAbsolute = convertAbsolute(route)
   const extensions = ["md", "markdown", "mkd", "mdown", "mdtxt", "mdtext"];
-  const formatted = route.toLowerCase();
+  const formatted = rutaAbsolute.toLowerCase();
     // Obtener la extensión del archivo
   const fileExtension = formatted.split('.').pop();
   return extensions.includes(fileExtension);
 }
 
-
-console.log(validarExtension("docs/01-milestone.md"));
+const markdownLinkExtractor = require('markdown-link-extractor');
 
 function mdLinks(filePath) {
   // Obtén la extensión del archivo
   const fileExtension = path.extname(filePath);
-  
-
-  // Valida la extensión
-  const extensions = ["md", "markdown", "mkd", "mdown", "mdtxt", "mdtext"];
-  const formatted = fileExtension.toLowerCase().slice(1);
-
-  if (!extensions.includes(formatted)) {
-    console.log(`Extension de archivo incorrecta`);
+ 
+  if (!validarExtension(fileExtension)) {
+    console.log(`No es un arvhivo Markdown`);
   } else {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
           reject(err);
         } else {
-          resolve(data);
+          const links = markdownLinkExtractor(data);
+
+          // Puedes imprimir o hacer algo con los enlaces aquí
+          console.log('Enlaces encontrados:', links);
+
+          //resolve(data);
         }
       });
     });
