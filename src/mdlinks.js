@@ -47,4 +47,4 @@ function mdLinks(filePath) {
     });
   }
 }
-module.exports = mdLinks;
+module.exports = {isAbsolutePath, convertAbsolute, validarExtension, mdLinks};
