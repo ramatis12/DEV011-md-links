@@ -1,4 +1,4 @@
-const mdLinks = require('./mdlinks.js');
+const { mdLinks } = require('../src/mdlinks.js');
 
 const mdlFilePath = './README.md';
 
