@@ -25,11 +25,11 @@ function validarExtension(route) {
 const markdownLinkExtractor = require('markdown-link-extractor');
 
 function mdLinks(filePath) {
-  // Obtén la extensión del archivo
   const fileExtension = path.extname(filePath);
  
   if (!validarExtension(fileExtension)) {
     console.log(`No es un arvhivo Markdown`);
+    return Promise.resolve([]);
   } else {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, "utf8", (err, data) => {
@@ -37,9 +37,19 @@ function mdLinks(filePath) {
           reject(err);
         } else {
           const links = markdownLinkExtractor(data);
-
+          const linksArray = Array.from(links);
           // Puedes imprimir o hacer algo con los enlaces aquí
-          console.log('Enlaces encontrados:', links);
+  //         console.log('Enlaces encontrados:', linksArray);
+  //  // Verifica si links es un array antes de mapearlo
+  //  if (!Array.isArray(linksArray)) {
+  //   console.log('no hay link');
+  //   resolve([]);
+  //   return;
+  // }
+  const linksAsObjects = links.map(link => ({ href: link }));
+console.log(linksArray);
+  // Resuelve la promesa con el array de objetos de enlaces
+  resolve(linksAsObjects);
 
           //resolve(data);
         }
