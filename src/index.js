@@ -1,10 +1,10 @@
-const { mdLinks } = require('../src/mdlinks.js');
+const { linksArray } = require('./funciones.js');
 
 const mdlFilePath = './README.md';
 
-mdLinks(mdlFilePath)
-  .then((links) => {
-    console.log(links);
+linksArray(mdlFilePath)
+  .then((res) => {
+    console.log(res);
   })
   .catch((error) => {
     console.error(`Error al leer el archivo`);
