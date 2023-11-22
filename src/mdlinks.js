@@ -1,28 +1,44 @@
 const fs = require("fs");
 const path = require("path");
+const markdownLinkExtractor = require('markdown-link-extractor');
+
 //funcion si es absoluta
-//Funcion para convertirla en absoluta
-//funcion validar archivo MD
-// funcion leer archivo 
-
 const isAbsolutePath = (route) => path.isAbsolute(route);
-
+//Funcion para convertirla en absoluta
 const convertAbsolute = (route) => {
   const validatePath = isAbsolutePath(route);
   const returnPathAbsolute = validatePath ? route : path.resolve(route);
   return returnPathAbsolute;
 };
-
+//funcion validar archivo MD
 function validarExtension(route) {
   const rutaAbsolute = convertAbsolute(route)
   const extensions = ["md", "markdown", "mkd", "mdown", "mdtxt", "mdtext"];
   const formatted = rutaAbsolute.toLowerCase();
-    // Obtener la extensión del archivo
+ 
   const fileExtension = formatted.split('.').pop();
   return extensions.includes(fileExtension);
 }
-
-const markdownLinkExtractor = require('markdown-link-extractor');
+// funcion leer archivo 
+// function readFile(filePath){
+//   const fileExtension = path.extname(filePath);
+//   if (!validarExtension(fileExtension)) {
+//     console.log(`No es un arvhivo Markdown`);
+//     return Promise.resolve([]);
+//   } else {
+//   fs.readFile(filePath, 'utf8', (err, data) => {
+//     if (err) {
+//       console.error('Error al leer el archivo:', err);
+//       return;
+//     }
+//     const links = markdownLinkExtractor(data);
+//     return links;
+//     //console.log('Enlaces extraídos:\n', links);
+//   });
+  
+//   }
+// }
+// guardar en un array
 
 function mdLinks(filePath) {
   const fileExtension = path.extname(filePath);
@@ -35,21 +51,17 @@ function mdLinks(filePath) {
       fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
           reject(err);
-        } else {
-          const links = markdownLinkExtractor(data);
-          const linksArray = Array.from(links);
-          // Puedes imprimir o hacer algo con los enlaces aquí
-  //         console.log('Enlaces encontrados:', linksArray);
-  //  // Verifica si links es un array antes de mapearlo
-  //  if (!Array.isArray(linksArray)) {
-  //   console.log('no hay link');
-  //   resolve([]);
-  //   return;
-  // }
-  const linksAsObjects = links.map(link => ({ href: link }));
-console.log(linksArray);
+        } 
+        else {
+          const links = markdownLinkExtractor(data) || [];
+          const linksArray = Object.values(links);
+          linksArray.forEach(link => console.log(link));
+          //const urls = links.filter((link) => esURL(link));
+          //
+          //const linksAsObjects = linksArray.map(link => ({ href: link }));
+          console.log(links);
   // Resuelve la promesa con el array de objetos de enlaces
-  resolve(linksAsObjects);
+  //resolve(linksAsObjects);
 
           //resolve(data);
         }
@@ -57,4 +69,7 @@ console.log(linksArray);
     });
   }
 }
+
+
+
 module.exports = {isAbsolutePath, convertAbsolute, validarExtension, mdLinks};
