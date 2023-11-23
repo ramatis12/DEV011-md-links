@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const markdownLinkExtractor = require("markdown-link-extractor");
 const marked = require('marked');
-const { validateHeaderValue } = require("http");
 
 //funcion si es absoluta
 const isAbsolutePath = (route) => path.isAbsolute(route);
@@ -33,44 +32,46 @@ function readFile(route) {
         if (err) {
           reject(err);
         } else {
-          const links = markdownLinkExtractor(data);
+          const filter = markdownLinkExtractor(data);
           //console.log(links);
-          resolve(links);
+          resolve(filter);
         }
       });
     });
   }
 }
 
-
- function linksArray(filePath) {
-   const archivo = readFile(filePath);
-
-
-   //si puedo poner aqui la funcion markdownLinkExtractor y convertirla 
-   //en string con los Value para posteriormente hacer el array que necesito.
-
-//   const links = [];
-  //const tokens = marked.lexer(archivo);
-  //const links = markdownLinkExtractor(archivo);
-  //const htmlString = marked(links);
-  console.log('esto es archivo', archivo);
-//     if (links.length === 0) {
-//       console.log(`No se encontraron links`);
-//     return [];
-//     } else {
-//       console.log(`links`);
-//       // const linksArray = Object.values(links);
-//       // linksArray.forEach((link) => console.log(link));
-//      return;
-//     }
-
+function linksArray(filePath, linkHref) {
+  return new Promise((resolve, reject) => {
+    readFile(filePath)
+      .then((content) => {
+        // Hacer cualquier manipulación necesaria en los datos
+        const links = content.links;
+        const linkInfo = links.find((link) => link.href === linkHref);
+        // const linksAsObjects = links.map(link => ({
+        //    href: link ,
+        //    text: linkInfo,
+        //    filePath: filePath,
+        //   }));
+        // Por ahora, simplemente resolvemos la promesa con los links
+        resolve(linkInfo);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+//  function linksArray(filePath) {
+//    const archivo = readFile(filePath);
+//        let link = [];
+//      link = archivo.links;
+//   console.log('esto es archivo', archivo);
 //   const urls = links.filter((link) => esURL(link));
 //   const linksAsObjects = linksArray.map(link => ({ href: link }));
 //   console.log(linksArray);
 //   Resuelve la promesa con el array de objetos de enlaces
-  return archivo;
- }
+//   return archivo;
+//  }
 
 module.exports = {
   isAbsolutePath,
