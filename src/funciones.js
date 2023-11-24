@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const markdownLinkExtractor = require("markdown-link-extractor");
+const cheerio = require('cheerio');
 const marked = require('marked');
+const axios = require('axios');
 
 //funcion si es absoluta
 const isAbsolutePath = (route) => path.isAbsolute(route);
@@ -32,8 +33,8 @@ function readFile(route) {
         if (err) {
           reject(err);
         } else {
-          const filter = markdownLinkExtractor(data);
-          //console.log(links);
+          const filter = marked.parse(data);
+          //console.log(filter);
           resolve(filter);
         }
       });
@@ -41,37 +42,30 @@ function readFile(route) {
   }
 }
 
-function linksArray(filePath, linkHref) {
+function linksArray(filePath) {
   return new Promise((resolve, reject) => {
-    readFile(filePath)
+   readFile(filePath)
       .then((content) => {
-        // Hacer cualquier manipulación necesaria en los datos
-        const links = content.links;
-        const linkInfo = links.find((link) => link.href === linkHref);
-        // const linksAsObjects = links.map(link => ({
-        //    href: link ,
-        //    text: linkInfo,
-        //    filePath: filePath,
-        //   }));
-        // Por ahora, simplemente resolvemos la promesa con los links
-        resolve(linkInfo);
+        const $ = cheerio.load(content);
+        const links = [];
+
+           $('a').each((index, element) => {
+          const href = $(element).attr('href');
+          const text = $(element).text();
+          const file = convertAbsolute(filePath);
+          const status = "";
+          const ok = "";
+          links.push({ href, text, file, status, ok });
+      });
+        console.log(links);
+        resolve(links);
       })
       .catch((error) => {
         reject(error);
       });
   });
 }
-//  function linksArray(filePath) {
-//    const archivo = readFile(filePath);
-//        let link = [];
-//      link = archivo.links;
-//   console.log('esto es archivo', archivo);
-//   const urls = links.filter((link) => esURL(link));
-//   const linksAsObjects = linksArray.map(link => ({ href: link }));
-//   console.log(linksArray);
-//   Resuelve la promesa con el array de objetos de enlaces
-//   return archivo;
-//  }
+
 
 module.exports = {
   isAbsolutePath,
