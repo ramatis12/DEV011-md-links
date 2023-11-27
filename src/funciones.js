@@ -5,22 +5,33 @@ const marked = require('marked');
 const axios = require('axios');
 
 //funcion si es absoluta
-const isAbsolutePath = (route) => path.isAbsolute(route);
+function isAbsolutePath(route){ return path.isAbsolute(route)};
+
 //Funcion para convertirla en absoluta
-const convertAbsolute = (route) => {
+function convertAbsolute(route) {
   const validatePath = isAbsolutePath(route);
   const returnPathAbsolute = validatePath ? route : path.resolve(route);
   return returnPathAbsolute;
 };
+//validar que la ruta existe en el equipo
+function validarRuta(route) {
+  const validatePath = convertAbsolute(route);
+  if (!fs.existsSync(validatePath)) {
+    console.log(`La ruta '${validatePath}' no existe.`);
+    return validatePath;
+  }
+} 
+
 //funcion validar archivo MD
 function validarExtension(route) {
-  const rutaAbsolute = convertAbsolute(route);
+  const rutaAbsolute = validarRuta(route);
   const extensions = ["md", "markdown", "mkd", "mdown", "mdtxt", "mdtext"];
   const formatted = rutaAbsolute.toLowerCase();
-
   const fileExtension = formatted.split(".").pop();
+  console.log(fileExtension);
   return extensions.includes(fileExtension);
 }
+
 // funcion leer archivo
 function readFile(route) {
   const fileExtension = path.extname(route);
@@ -42,9 +53,10 @@ function readFile(route) {
   }
 }
 
-function linksArray(filePath) {
+function linksArray(route) {
+  console.log("el nombre correcto es", route);
   return new Promise((resolve, reject) => {
-   readFile(filePath)
+   readFile(route)
       .then((content) => {
         const $ = cheerio.load(content);
         const links = [];
@@ -52,7 +64,7 @@ function linksArray(filePath) {
            $('a').each((index, element) => {
           const href = $(element).attr('href');
           const text = $(element).text();
-          const file = convertAbsolute(filePath);
+          const file = convertAbsolute(route);
           const status = "";
           const ok = "";
           links.push({ href, text, file, status, ok });
@@ -70,6 +82,7 @@ function linksArray(filePath) {
 module.exports = {
   isAbsolutePath,
   convertAbsolute,
+  validarRuta,
   validarExtension,
   readFile,
   linksArray
