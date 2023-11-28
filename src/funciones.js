@@ -15,7 +15,9 @@ function convertAbsolute(route) {
 };
 //validar que la ruta existe en el equipo
 function validarRuta(route) {
+  console.log(route);
   const validatePath = convertAbsolute(route);
+  console.log(validatePath);
   if (!fs.existsSync(validatePath)) {
     console.log(`La ruta '${validatePath}' no existe.`);
     return validatePath;
@@ -23,6 +25,7 @@ function validarRuta(route) {
 }
 //funcion validar archivo MD
 function validarExtension(route) {
+  console.log("texto", route);
   const rutaAbsolute = validarRuta(route);
   const extensions = ["md", "markdown", "mkd", "mdown", "mdtxt", "mdtext"];
   const formatted = rutaAbsolute.toLowerCase();
@@ -38,6 +41,7 @@ function readFile(route) {
     console.log(`No es un arvhivo Markdown`);
     return Promise.resolve([]);
   } else {
+    console.log("hola", route);
     return new Promise((resolve, reject) => {
       fs.readFile(route, "utf8", (err, data) => {
         if (err) {
@@ -54,13 +58,12 @@ function readFile(route) {
 
 // crear array
 function linksArray(route) {
-  console.log("el nombre correcto es", route);
+  //console.log("el nombre correcto es", route);
   return new Promise((resolve, reject) => {
    readFile(route)
       .then((content) => {
         const $ = cheerio.load(content);
         const links = [];
-
          const linkPromises = $('a').map((index, element) => {
           const href = $(element).attr('href');
           const text = $(element).text();
@@ -85,11 +88,9 @@ function linksArray(route) {
         
         Promise.all(linkPromises)
           .then((resolvedLinks) => {
-            console.log(resolvedLinks);
+            //console.log(resolvedLinks);
             resolve(resolvedLinks);
       });
-        //console.log(links);
-        resolve(links);
       })
       .catch((error) => {
        const status = error.response ? error.response.status : 'Error de red';
