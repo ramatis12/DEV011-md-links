@@ -2,7 +2,7 @@
 //const fs = require("fs");
 const path = require("path");
 const marked = require("marked");
-const { isAbsolutePath, convertAbsolute, validarRuta, validarExtension,readFile, linksArray, mdLinks } = require("../src/funciones.js");
+const { isAbsolutePath, convertAbsolute, validarRuta, validarExtension, readFile, linksArray } = require("../src/funciones.js");
 
 
 describe("mdLinks", () => {
