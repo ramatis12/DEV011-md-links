@@ -2,11 +2,9 @@
 const{ mdLinks } = require("..")
 
 const mdlFilePath = './README.md';
-const mdlFilePath1 = './README.js';
+const mdlFilePath1 = './README.png';
+const mdlFilePath2 = './thumb.png';
 const test = './test/array.md';
-const isValidateSelected = process.argv.find(element => element === "--validate") ? true : false; 
-//console.log(mdLinks( mdlFilePath ));
 
-mdLinks(mdlFilePath, isValidateSelected).then ((res) => console.log(res))
-.catch((error) => console.log(error))
-//console.log(isValidateSelected);
+console.log(mdLinks( mdlFilePath));
+

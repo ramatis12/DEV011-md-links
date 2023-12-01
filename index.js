@@ -1,32 +1,25 @@
 
-const {  convertAbsolute, validarRuta, validarExtension, readFile, linksArray, arrayComplete } = require("./src/funciones.js");
+const { isAbsolutePath, convertAbsolute, validarRuta, validarExtension, readFile } = require("./src/funciones.js");
 
 
 function mdLinks(route, validate) {
-  return new Promise((resolve, reject) => {
-  const absoluta = convertAbsolute(route);
-  const linksFin = validarRuta(absoluta);
-  const extensions = validarExtension(linksFin);
-  //console.log("archivo", extensions);
-  readFile(absoluta)
-  if (validate === true) {
-    arrayComplete(extensions)
-    .then((res) => {
-      resolve (res);
-    })
-    .catch((error) => {
-        reject(error); 
-    });
-  }else{
-  linksArray(extensions)
-  .then((res) => {
-    resolve (res);
-  })
-  .catch((error) => {
-      reject(error); 
-  });
-}
-  })
+  const esAbsoluta = isAbsolutePath(route);
+   if(esAbsoluta !== true){
+     const convertirAbsoluta = convertAbsolute(route);
+     const validarURL = validarRuta(convertirAbsoluta);
+     const validarExtensionURL = validarExtension(validarURL);
+     readFile(validarExtensionURL)
+        .then((contenido) => {
+          console.log(contenido);
+        })
+        .catch((error) => {
+          console.error('Error al leer el archivo:', error);
+        });
+
+     //return leerArchivo
+   }
+  //return esAbsoluta
+
 }
   
   module.exports = {

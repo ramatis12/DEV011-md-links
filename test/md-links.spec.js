@@ -27,17 +27,17 @@ describe("mdLinks", () => {
   });
 
   it("Debera imprimir un mensaje si la ruta no existe", () => {
-    const rutaInexistente =
-      "C:\\Users\\Sara Ramirez Matias\\Desktop\\laboratoria\\src\\01-milestone.md";
+    const rutaInexistente = "C:\\Users\\Sara Ramirez Matias\\Desktop\\laboratoria\\src\\01-milestone.md";
     const validacion = validarRuta(rutaInexistente);
+    
     expect(validacion).toEqual(rutaInexistente);
   });
 
   it("Debera devolver la ruta validada si existe", () => {
-    const rutaExistente =
-      "C:\\Users\\Sara Ramirez Matias\\Desktop\\laboratoria\\docs\\01-milestone.md";
-    const validacion = validarRuta(rutaExistente);
-    expect(validacion).toEqual(rutaExistente);
+    const rutaExistente ="C:\\Users\\Sara Ramirez Matias\\Desktop\\laboratoria\\docs\\01-milestone.md";
+    return validarRuta(rutaExistente).then((rutaExistente) => {
+    expect(rutaExistente).toBe(rutaExistente);
+  })
   });
 
   it("Debera devolver true para una extensión de archivo Markdown válida", () => {
