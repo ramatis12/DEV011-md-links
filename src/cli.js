@@ -1,4 +1,4 @@
-
+const yargs = require('yargs');
 const{ mdLinks } = require("..")
 
 const mdlFilePath = './README.md';
@@ -9,6 +9,6 @@ const isValidateSelected = process.argv.find(element => element === "--validate"
 const idStatsSelected = process.argv.find(element => element === "--stats") ? true : false;
 //console.log(mdLinks( mdlFilePath ));
 
-mdLinks(mdlFilePath, isValidateSelected, idStatsSelected).then ((res) => console.log(res))
+mdLinks(test, isValidateSelected, idStatsSelected).then ((res) => console.log(res))
 .catch((error) => console.log(error))
 

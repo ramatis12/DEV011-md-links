@@ -18,18 +18,12 @@ function mdLinks(route, validate, stats) {
             })
           }
          else if (stats && (validate === true || !validate)) {
-          const documentoArray = statsFun(contenido);
-          resolve(documentoArray);
-          // if (validate) {
-          //   Promise.all(validarFun(contenido, validate))
-          //   .then((links) => {
-          //     const enlacesInvalidos = links.filter(links => !links.ok);
-          //     const datosValidados = enlacesInvalidos.length;
-          //     const resultadoValidar = "Broken: " + datosValidados;
-          //     resolve(resultadoValidar);
-          //   })
-          // }
-          }
+          Promise.all(codigoHTTP(contenido))
+          .then((links) => {
+            const resultadosStats = statsFun(links, validate)
+            resolve(resultadosStats);
+          })
+           }
           else {
             const documentoArray = linksArray(contenido, validarExtensionURL);
             resolve(documentoArray);
@@ -39,12 +33,8 @@ function mdLinks(route, validate, stats) {
           console.error('Error al leer el archivo ');
         });
     }
-    //return validarExtensionURL
   })
-  //return esAbsoluta
-
 }
-
 module.exports = {
   mdLinks
 };

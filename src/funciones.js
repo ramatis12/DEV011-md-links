@@ -83,32 +83,20 @@ function codigoHTTP(html, rutaArchivo) {
   });
   return links;
 }
-function statsFun(html) {
-  const $ = cheerio.load(html);
-  const links = [];
-  $('a').each((index, element) => {
-    const href = $(element).attr('href');
-  links.push(fetchPromise);
-  });
-  const enlacesUnicos = links.filter((enlace, index) => links.indexOf(enlace) === index).length;
-  const total =  links.length;
- const resultadoStats = "Total: " + total + '\n' + "Unique: " + enlacesUnicos;
-return resultadoStats;
-}
 
-function validarFun(html) {
-   const $ = cheerio.load(html);
-  const datos = [];
-  $('a').each((index, element) => {
-    const href = $(element).attr('href');
-  const fetchPromise = fetch(href)
-    .then(response => ({ ok: response.ok }))
-    .catch(error => ({ ok: false }));
-  datos.push(fetchPromise);
-  });
-return datos;
-}
-
+function statsFun(objetArray, isValidateSelected) {
+   const numberLinks = objetArray.filter(item => item.href).length;
+   const uniqueHrefs = [...new Set(objetArray.map(item => item.href))];
+   const numberUnique = uniqueHrefs.length;
+   if (isValidateSelected) {
+    const numberBroken = objetArray.filter(item => !item.ok).length;
+    const totales = "Total: " + numberLinks + "\n" + "Unique: " + numberUnique + "\n" + "Broken: " + numberBroken;
+  return totales;  
+   }else{
+  const totales = "Total: " + numberLinks + "\n" + "Unique: " + numberUnique;
+  return totales; 
+   }
+  }
 
 
 module.exports = {
@@ -119,6 +107,5 @@ module.exports = {
    readFile,
    linksArray,
    codigoHTTP,
-   statsFun,
-   validarFun
+   statsFun
 };
