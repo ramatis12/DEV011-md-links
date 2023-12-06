@@ -16,24 +16,24 @@ function convertAbsolute(route) {
 };
 
 //validar que la ruta existe en el equipo
-function validarRuta(route) {
+function validateRoute(route) {
    if (fs.existsSync(route)) {
     return route
   } else {
-    const msj = "La ruta no existe"
-    return msj
+    const msjError = "La ruta no existe"
+    return msjError
   } 
 }
 
 //funcion validar archivo MD
-function validarExtension(route) {
-  const rutaAbsolute = route;
+function validateExtension(route) {
+  const routeAbsolute = route;
   const extensions = ["md", "markdown", "mkd", "mdown", "mdtxt", "mdtext"];
-  const formatted = rutaAbsolute.toLowerCase();
+  const formatted = routeAbsolute.toLowerCase();
   const fileExtension = formatted.split(".").pop();
   if (!extensions.includes(fileExtension)) {
-    const msj = "No es un arvhivo Markdown"
-    return msj
+    const msjError = "No es un arvhivo Markdown"
+    return msjError
   } else {
     return formatted;
   }
@@ -45,8 +45,8 @@ function readFile(route) {
     //console.log(route);
     fs.readFile(route, 'utf8', (err, data) => {
       if (err) {
-        const msj = "No se puede leer el arvhivo"
-          reject(msj); 
+        const msjError = "No se puede leer el arvhivo"
+          reject(msjError); 
       } else {
         const filter = marked.parse(data);
           resolve(filter);
@@ -56,20 +56,20 @@ function readFile(route) {
 }
 
 // crear array
-function linksArray(html, rutaArchivo) {
+function linksArray(html, routeArchivo) {
 const $ = cheerio.load(html);
   const links = [];
   $('a').each((index, element) => {
     const href = $(element).attr('href');
     const text = $(element).text();
-    const file = rutaArchivo;
+    const file = routeArchivo;
     links.push({href, text, file});
     //console.log(typeof(links));
   });
   return links;
 }
 
-function codigoHTTP(html, rutaArchivo) {
+function codeHTTP(html, rutaArchivo) {
   const $ = cheerio.load(html);
   const links = [];
   $('a').each((index, element) => {
@@ -102,10 +102,10 @@ function statsFun(objetArray, isValidateSelected) {
 module.exports = {
   isAbsolutePath,
    convertAbsolute,
-   validarRuta,
-   validarExtension,
+   validateRoute,
+   validateExtension,
    readFile,
    linksArray,
-   codigoHTTP,
+   codeHTTP,
    statsFun
 };

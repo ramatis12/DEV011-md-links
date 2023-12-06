@@ -1,32 +1,32 @@
 
-const { isAbsolutePath, convertAbsolute, validarRuta, validarExtension, readFile, linksArray, codigoHTTP, validarFun, statsFun } = require("./src/funciones.js");
+const { isAbsolutePath, convertAbsolute, validateRoute, validateExtension, readFile, linksArray, codeHTTP, statsFun } = require("./src/funciones.js");
 
 
 function mdLinks(route, validate, stats) {
   return new Promise((resolve, reject) => {
-    const esAbsoluta = isAbsolutePath(route);
-    if (esAbsoluta !== true) {
-      const convertirAbsoluta = convertAbsolute(route);
-      const validarURL = validarRuta(convertirAbsoluta);
-      const validarExtensionURL = validarExtension(validarURL);
-      readFile(validarExtensionURL)
-        .then((contenido) => {
+    const validateRouteAbsolute = isAbsolutePath(route);
+    if (validateRouteAbsolute !== true) {
+      const convertRouteAbsolute = convertAbsolute(route);
+      const validateURL = validateRoute(convertRouteAbsolute);
+      const validateExtensionURL = validateExtension(validateURL);
+      readFile(validateExtensionURL)
+        .then((content) => {
           if (validate === true && stats === false) {
-            Promise.all(codigoHTTP(contenido, validarExtensionURL))
+            Promise.all(codeHTTP(content, validateExtensionURL))
             .then((links) => {
               resolve(links);
             })
           }
          else if (stats && (validate === true || !validate)) {
-          Promise.all(codigoHTTP(contenido))
+          Promise.all(codeHTTP(content))
           .then((links) => {
             const resultadosStats = statsFun(links, validate)
             resolve(resultadosStats);
           })
            }
           else {
-            const documentoArray = linksArray(contenido, validarExtensionURL);
-            resolve(documentoArray);
+            const documentArray = linksArray(content, validateExtensionURL);
+            resolve(documentArray);
           }
         })
         .catch((error) => {
