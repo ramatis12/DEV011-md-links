@@ -1,9 +1,12 @@
 {
-  "name": "md-links",
-  "version": "0.1.0",
+  "name": "md-links911201",
+  "version": "0.1.2",
   "autor": "sara ramirez matias",
   "engines": {
     "node": ">=16.x"
+  },
+  "bin": {
+    "mdLinks": "./src/cli.js"
   },
   "bootcamp": {
     "createdAt": "2023-09-22T12:23:39.903Z",
